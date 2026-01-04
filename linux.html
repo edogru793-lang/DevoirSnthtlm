@@ -1,0 +1,1066 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LINUX_PROJET_SNT - Découverte de Linux</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary-color: #1793d1;
+            --secondary-color: #1a1a1a;
+            --accent-color: #f0a500;
+            --light-color: #2d2d2d;
+            --dark-color: #121212;
+            --text-color: #e0e0e0;
+            --text-light: #b0b0b0;
+            --success-color: #28a745;
+            --warning-color: #ffc107;
+        }
+
+        body {
+            background-color: var(--dark-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Header et navigation */
+        header {
+            background: linear-gradient(135deg, #0a0a0a, var(--secondary-color));
+            color: white;
+            padding: 1rem 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            animation: slideDown 0.8s ease;
+            border-bottom: 2px solid var(--primary-color);
+        }
+
+        @keyframes slideDown {
+            from { transform: translateY(-100%); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo {
+            height: 50px;
+            filter: drop-shadow(0 0 5px rgba(23, 147, 209, 0.5));
+            animation: rotate 20s linear infinite;
+            transition: all 0.5s ease;
+        }
+
+        .logo:hover {
+            transform: scale(1.1);
+            filter: drop-shadow(0 0 10px rgba(23, 147, 209, 0.8));
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0); }
+            100% { transform: rotate(360deg); }
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text-color);
+            text-shadow: 0 0 10px rgba(23, 147, 209, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        h1:hover {
+            text-shadow: 0 0 15px rgba(23, 147, 209, 0.6);
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            justify-content: center;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+
+        nav ul li {
+            margin: 0 15px;
+        }
+
+        nav ul li a {
+            color: var(--text-color);
+            text-decoration: none;
+            font-weight: 600;
+            padding: 8px 15px;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+            display: inline-block;
+            border: 1px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        nav ul li a::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(23, 147, 209, 0.2), transparent);
+            transition: left 0.6s ease;
+        }
+
+        nav ul li a:hover::before {
+            left: 100%;
+        }
+
+        nav ul li a:hover {
+            background-color: rgba(23, 147, 209, 0.2);
+            transform: translateY(-3px);
+            border-color: var(--primary-color);
+            box-shadow: 0 5px 15px rgba(23, 147, 209, 0.2);
+        }
+
+        /* Sections principales */
+        section {
+            padding: 60px 0;
+            animation: fadeIn 1s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        section:nth-child(even) {
+            background-color: var(--secondary-color);
+        }
+
+        h2 {
+            color: var(--primary-color);
+            margin-bottom: 25px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid var(--accent-color);
+            font-size: 2.2rem;
+            position: relative;
+            animation: slideInLeft 0.8s ease;
+            text-shadow: 0 0 5px rgba(23, 147, 209, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        h2:hover {
+            text-shadow: 0 0 10px rgba(23, 147, 209, 0.5);
+        }
+
+        @keyframes slideInLeft {
+            from { transform: translateX(-30px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        h3 {
+            color: var(--text-color);
+            margin: 25px 0 15px;
+            font-size: 1.6rem;
+            transition: all 0.3s ease;
+        }
+
+        h3:hover {
+            transform: translateX(5px);
+        }
+
+        p {
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+            color: var(--text-light);
+        }
+
+        /* Tableaux - SANS ZOOM */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 30px 0;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            overflow: hidden;
+            animation: fadeIn 1s ease;
+            border: 1px solid #333;
+            transition: all 0.4s ease;
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #333;
+            transition: all 0.3s ease;
+        }
+
+        th {
+            background-color: var(--primary-color);
+            color: white;
+            font-weight: 600;
+            position: relative;
+            overflow: hidden;
+        }
+
+        th::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.6s ease;
+        }
+
+        th:hover::after {
+            left: 100%;
+        }
+
+        tr:nth-child(even) {
+            background-color: #2a2a2a;
+        }
+
+        tr:nth-child(odd) {
+            background-color: #222;
+        }
+
+        tr:hover {
+            background-color: #333;
+            transition: background-color 0.3s;
+            /* SUPPRIMÉ : transform: scale(1.01); */
+        }
+
+        /* Cartes de distributions - SANS GROSSISSEMENT */
+        .distributions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .distribution-card {
+            background: linear-gradient(145deg, #2a2a2a, #222);
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+            transition: all 0.4s ease;
+            border-top: 5px solid var(--primary-color);
+            animation: fadeIn 1s ease; /* Animation simple */
+            border: 1px solid #333;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .distribution-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent, rgba(23, 147, 209, 0.05), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.6s ease;
+        }
+
+        .distribution-card:hover::before {
+            transform: translateX(100%);
+        }
+
+        .distribution-card:hover {
+            transform: translateY(-5px); /* LÉGER DÉPLACEMENT SEULEMENT */
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            border-color: var(--accent-color);
+        }
+
+        .distribution-card h3 {
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .distro-logo {
+            width: 45px;
+            height: 45px;
+            object-fit: contain;
+            filter: drop-shadow(0 0 3px rgba(255, 255, 255, 0.3));
+            transition: all 0.4s ease;
+        }
+
+        .distribution-card:hover .distro-logo {
+            transform: scale(1.1) rotate(3deg); /* LÉGER SEULEMENT */
+            filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.4));
+        }
+
+        .user-type {
+            display: inline-block;
+            background-color: rgba(23, 147, 209, 0.2);
+            color: var(--primary-color);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            margin-top: 10px;
+            font-weight: 600;
+            border: 1px solid rgba(23, 147, 209, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .distribution-card:hover .user-type {
+            background-color: rgba(23, 147, 209, 0.3);
+            transform: translateY(-2px);
+        }
+
+        /* Formulaire - SANS REBOND */
+        .form-container {
+            max-width: 700px;
+            margin: 40px auto;
+            background: linear-gradient(145deg, #2a2a2a, #222);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            animation: fadeIn 1s ease; /* SIMPLE FADE-IN */
+            border: 1px solid #333;
+            transition: all 0.4s ease;
+        }
+
+        .form-container:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.6);
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--text-color);
+            transition: all 0.3s ease;
+        }
+
+        .form-group:hover label {
+            color: var(--primary-color);
+            transform: translateX(5px);
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 12px 15px;
+            background-color: #333;
+            border: 2px solid #444;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s;
+            color: var(--text-color);
+        }
+
+        input:hover, select:hover, textarea:hover {
+            border-color: #555;
+            background-color: #3a3a3a;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(23, 147, 209, 0.2);
+            background-color: #3a3a3a;
+            transform: translateY(-2px);
+        }
+
+        button {
+            background: linear-gradient(to right, var(--primary-color), #0d6efd);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 10px;
+            box-shadow: 0 5px 15px rgba(23, 147, 209, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.6s ease;
+        }
+
+        button:hover::before {
+            left: 100%;
+        }
+
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 20px rgba(23, 147, 209, 0.5);
+        }
+
+        /* Timeline */
+        .timeline {
+            position: relative;
+            max-width: 1000px;
+            margin: 50px auto;
+        }
+
+        .timeline::after {
+            content: '';
+            position: absolute;
+            width: 6px;
+            background: linear-gradient(to bottom, var(--primary-color), var(--accent-color));
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            margin-left: -3px;
+            border-radius: 3px;
+        }
+
+        .timeline-item {
+            padding: 10px 40px;
+            position: relative;
+            width: 50%;
+            animation: fadeIn 1s ease;
+        }
+
+        .timeline-item:nth-child(odd) {
+            left: 0;
+        }
+
+        .timeline-item:nth-child(even) {
+            left: 50%;
+        }
+
+        .timeline-content {
+            padding: 20px 25px;
+            background: linear-gradient(145deg, #2a2a2a, #222);
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+            position: relative;
+            border-left: 5px solid var(--accent-color);
+            border: 1px solid #333;
+            transition: all 0.4s ease;
+        }
+
+        .timeline-content:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+            border-left-color: var(--primary-color);
+        }
+
+        .timeline-item:nth-child(even) .timeline-content {
+            border-left: none;
+            border-right: 5px solid var(--accent-color);
+        }
+
+        .timeline-item:nth-child(even) .timeline-content:hover {
+            border-right-color: var(--primary-color);
+        }
+
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            width: 25px;
+            height: 25px;
+            background-color: var(--secondary-color);
+            border: 5px solid var(--primary-color);
+            border-radius: 50%;
+            top: 15px;
+            right: -13px;
+            z-index: 1;
+            box-shadow: 0 0 10px rgba(23, 147, 209, 0.5);
+            transition: all 0.3s ease;
+        }
+
+        .timeline-item:hover::after {
+            transform: scale(1.1);
+            border-color: var(--accent-color);
+        }
+
+        .timeline-item:nth-child(even)::after {
+            left: -12px;
+        }
+
+        /* Footer */
+        footer {
+            background: linear-gradient(135deg, #0a0a0a, var(--secondary-color));
+            color: white;
+            padding: 40px 0 20px;
+            text-align: center;
+            margin-top: 60px;
+            border-top: 2px solid var(--primary-color);
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .footer-logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text-color);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-shadow: 0 0 10px rgba(23, 147, 209, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .footer-logo:hover {
+            text-shadow: 0 0 15px rgba(23, 147, 209, 0.6);
+            transform: translateY(-3px);
+        }
+
+        .copyright {
+            font-size: 1rem;
+            opacity: 0.8;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-light);
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .timeline::after {
+                left: 31px;
+            }
+            
+            .timeline-item {
+                width: 100%;
+                padding-left: 70px;
+                padding-right: 25px;
+            }
+            
+            .timeline-item:nth-child(even) {
+                left: 0;
+            }
+            
+            .timeline-item::after {
+                left: 18px;
+                right: auto;
+            }
+            
+            .timeline-item:nth-child(even)::after {
+                left: 18px;
+            }
+            
+            .footer-content {
+                flex-direction: column;
+                gap: 20px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            nav ul {
+                flex-direction: column;
+                align-items: center;
+                gap: 10px;
+            }
+            
+            h1 {
+                font-size: 1.5rem;
+            }
+            
+            h2 {
+                font-size: 1.8rem;
+            }
+            
+            .distributions-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-container {
+                padding: 25px;
+            }
+            
+            .distro-logo {
+                width: 40px;
+                height: 40px;
+            }
+        }
+
+        /* Animations simplifiées */
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(1); }
+        }
+
+        .highlight {
+            background: linear-gradient(120deg, rgba(23, 147, 209, 0.2) 0%, rgba(23, 147, 209, 0) 100%);
+            padding: 3px 6px;
+            border-radius: 4px;
+        }
+        
+        /* Effets lumineux */
+        .glow {
+            text-shadow: 0 0 10px rgba(23, 147, 209, 0.5);
+        }
+        
+        /* Style des listes */
+        ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        
+        ul li {
+            padding: 8px 0;
+            color: var(--text-light);
+            border-bottom: 1px solid #333;
+            transition: all 0.3s ease;
+            position: relative;
+            padding-left: 25px;
+        }
+        
+        ul li:hover {
+            color: var(--text-color);
+            transform: translateX(5px);
+            border-bottom-color: var(--primary-color);
+        }
+        
+        ul li:before {
+            content: "▸";
+            color: var(--primary-color);
+            margin-right: 10px;
+            position: absolute;
+            left: 0;
+            transition: all 0.3s ease;
+        }
+        
+        ul li:hover:before {
+            transform: scale(1.2);
+            color: var(--accent-color);
+        }
+        
+        /* Animation au survol des cartes d'applications */
+        .application-card {
+            transition: all 0.4s ease;
+        }
+        
+        .application-card:hover {
+            transform: translateY(-5px) scale(1.01);
+        }
+    </style>
+</head>
+<body>
+    <!-- En-tête -->
+    <header>
+        <div class="container">
+            <div class="logo-container">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/3/35/Tux.svg" alt="Logo Tux Linux" class="logo">
+                <h1 class="glow">LINUX_PROJET_SNT</h1>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="#intro">Accueil</a></li>
+                    <li><a href="#histoire">Histoire</a></li>
+                    <li><a href="#distributions">Distributions</a></li>
+                    <li><a href="#applications">Applications</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Section d'introduction -->
+    <section id="intro" class="container">
+        <h2>LE SYSTÈME D'EXPLOITATION LINUX</h2>
+        <p>Linux est un système d'exploitation libre et gratuit. Il sert de base à de nombreuses distributions utilisées aujourd'hui.</p>
+        
+        <div class="highlight-section" style="background: rgba(23, 147, 209, 0.1); padding: 25px; border-radius: 10px; margin: 30px 0; border: 1px solid rgba(23, 147, 209, 0.3); transition: all 0.4s ease;">
+            <h3>Nature et Philosophie</h3>
+            <p>Linux est développé en "Open Source", ce qui veut dire que son code est public et que tout le monde peut participer à son amélioration.</p>
+        </div>
+        
+        <h3>Caractéristiques Techniques</h3>
+        <ul>
+            <li>Modèle économique libre et collaboratif</li>
+            <li>Bonne sécurité contre les virus</li>
+            <li>Utilise peu de ressources matérielles</li>
+            <li>Très stable pour les serveurs</li>
+        </ul>
+        
+        <div style="margin-top: 40px;">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Numéro</th>
+                        <th>Utilisation</th>
+                        <th>Exemples de distributions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>001</td>
+                        <td>Pour les débutants, facile à utiliser</td>
+                        <td>Ubuntu, Fedora</td>
+                    </tr>
+                    <tr>
+                        <td>002</td>
+                        <td>Très stable, souvent utilisé sur les serveurs</td>
+                        <td>Debian, CentOS</td>
+                    </tr>
+                    <tr>
+                        <td>003</td>
+                        <td>Pour les experts, nécessite des commandes</td>
+                        <td>Arch Linux, Gentoo</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <p style="margin-top: 30px; font-style: italic; color: #aaa;">
+            Ce site a été réalisé en HTML et CSS, avec l'aide de ressources trouvées en ligne.
+        </p>
+    </section>
+
+    <!-- Section histoire -->
+    <section id="histoire" style="background-color: var(--secondary-color);">
+        <div class="container">
+            <h2>L'HISTOIRE DE LINUX</h2>
+            <p style="text-align: center; font-size: 1.2rem; margin-bottom: 40px; color: var(--text-color);">
+                De 1991 à aujourd'hui, Linux est passé d'un petit projet à un système utilisé partout dans le monde.
+            </p>
+            
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <h3>Naissance d'Unix</h3>
+                        <p>Ken Thompson et Dennis Ritchie créent Unix dans les années 70. C'est l'ancêtre de Linux.</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <h3>Projet GNU</h3>
+                        <p>Richard Stallman commence le projet GNU pour créer un système d'exploitation libre.</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <h3>Le message de Linus</h3>
+                        <p>Linus Torvalds, étudiant finlandais, annonce qu'il travaille sur un petit système d'exploitation.</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <h3>Tux est né</h3>
+                        <p>Linux choisit un manchot comme mascotte officielle après avoir été mordu par un manchot au zoo.</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <h3>Debian & Slackware</h3>
+                        <p>Les premières distributions importantes apparaissent et structurent l'écosystème Linux.</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <h3>Ubuntu</h3>
+                        <p>Mark Shuttleworth lance Ubuntu, rendant Linux accessible à tout le monde.</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <h3>Android</h3>
+                        <p>Google lance Android, basé sur le noyau Linux. Linux devient le système le plus utilisé au monde sur mobile grâce à Android.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section distributions -->
+    <section id="distributions" class="container">
+        <h2>Les Distributions</h2>
+        <p style="text-align: center; margin-bottom: 30px; font-size: 1.2rem; color: var(--text-light);">
+            Linux existe sous différentes "versions" appelées distributions. Chacune a ses particularités.
+        </p>
+        
+        <div class="distributions-grid">
+            <div class="distribution-card">
+                <h3>
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/9/9e/UbuntuCoF.svg" alt="Ubuntu Logo" class="distro-logo">
+                    Ubuntu
+                </h3>
+                <p>La plus populaire. Idéale pour les débutants, stable et facile à utiliser.</p>
+                <div class="user-type">Pour : Débutants, Développeurs</div>
+            </div>
+            
+            <div class="distribution-card">
+                <h3>
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/4/4a/Debian-OpenLogo.svg" alt="Debian Logo" class="distro-logo">
+                    Debian
+                </h3>
+                <p>Le père de nombreuses distributions. Réputée pour sa stabilité à toute épreuve.</p>
+                <div class="user-type">Pour : Serveurs, Puristes</div>
+            </div>
+            
+            <div class="distribution-card">
+                <h3>
+                    <img src="https://i.postimg.cc/VsnYj3t9/archlinux-os-logo-top-operating-system-signs-free-png.webp" alt="Arch Linux Logo" class="distro-logo">
+                    Arch Linux
+                </h3>
+                <p>Mise à jour continue. Vous construisez votre système vous-même. Pour les experts.</p>
+                <div class="user-type">Pour : Experts, Passionnés</div>
+            </div>
+            
+            <div class="distribution-card">
+                <h3>
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/3/3f/Linux_Mint_logo_without_wordmark.svg" alt="Linux Mint Logo" class="distro-logo">
+                    Linux Mint
+                </h3>
+                <p>Basée sur Ubuntu, elle ressemble à Windows pour faciliter la transition.</p>
+                <div class="user-type">Pour : Ceux qui viennent de Windows</div>
+            </div>
+            
+            <div class="distribution-card">
+                <h3>
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/4/41/Fedora_icon_%282021%29.svg" alt="Fedora Logo" class="distro-logo">
+                    Fedora
+                </h3>
+                <p>À la pointe de l'innovation. Souvent utilisée par Linus Torvalds lui-même.</p>
+                <div class="user-type">Pour : Développeurs, Innovateurs</div>
+            </div>
+            
+            <div class="distribution-card">
+                <h3>
+                    <img src="https://i.postimg.cc/VsrJ2GCQ/3752752.webp" alt="Trisquel Logo" class="distro-logo">
+                    Trisquel
+                </h3>
+                <p>100% libre. Recommandée par la Free Software Foundation. Aucun code propriétaire.</p>
+                <div class="user-type">Pour : Partisans du logiciel libre</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section applications -->
+    <section id="applications" style="background-color: var(--secondary-color);">
+        <div class="container">
+            <h2>OÙ UTILISE-T-ON LINUX ?</h2>
+            <p style="text-align: center; margin-bottom: 40px; font-size: 1.2rem; color: var(--text-color);">
+                Linux est présent dans de nombreux domaines de notre vie quotidienne.
+            </p>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 25px;">
+                <div class="distribution-card application-card" style="border-top-color: var(--success-color);">
+                    <h3>Serveurs & Infrastructure</h3>
+                    <p>La plupart des sites web utilisent Linux sur leurs serveurs car il est stable et fiable.</p>
+                </div>
+                
+                <div class="distribution-card application-card" style="border-top-color: var(--warning-color);">
+                    <h3>Téléphones mobiles</h3>
+                    <p>Android est basé sur Linux, ce qui en fait le système le plus utilisé sur les téléphones.</p>
+                </div>
+                
+                <div class="distribution-card application-card" style="border-top-color: var(--primary-color);">
+                    <h3>Objets connectés</h3>
+                    <p>On trouve Linux dans les routeurs, les box internet, les voitures connectées...</p>
+                </div>
+                
+                <div class="distribution-card application-card" style="border-top-color: #6f42c1;">
+                    <h3>Supercalculateurs</h3>
+                    <p>Tous les 500 supercalculateurs les plus puissants du monde utilisent Linux.</p>
+                </div>
+                
+                <div class="distribution-card application-card" style="border-top-color: #17a2b8;">
+                    <h3>Exploration spatiale</h3>
+                    <p>La NASA utilise Linux pour piloter des satellites et des robots comme Ingenuity sur Mars.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section formulaire de contact -->
+    <section id="contact" class="container">
+        <h2>FORMULAIRE DE CONTACT</h2>
+        <p style="text-align: center; color: var(--text-light); margin-bottom: 20px;">
+            (Formulaire de démonstration - ne fonctionne pas réellement)
+        </p>
+        
+        <div class="form-container">
+            <form id="contact-form">
+                <div class="form-group">
+                    <label for="nom">Nom</label>
+                    <input type="text" id="nom" placeholder="Votre nom" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" placeholder="Votre adresse email" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="tel">Téléphone (facultatif)</label>
+                    <input type="tel" id="tel" placeholder="Votre numéro de téléphone">
+                </div>
+                
+                <div class="form-group">
+                    <label for="distribution">Distribution préférée</label>
+                    <select id="distribution" required>
+                        <option value="" disabled selected>Sélectionnez une distribution</option>
+                        <option value="ubuntu">Ubuntu</option>
+                        <option value="debian">Debian</option>
+                        <option value="arch">Arch Linux</option>
+                        <option value="mint">Linux Mint</option>
+                        <option value="fedora">Fedora</option>
+                        <option value="trisquel">Trisquel</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="message">Commentaire</label>
+                    <textarea id="message" rows="5" placeholder="Votre message..."></textarea>
+                </div>
+                
+                <button type="submit" class="pulse">
+                    ENVOYER (Démonstration)
+                </button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    LINUX_PROJET_SNT
+                </div>
+                <div>
+                    <p><strong>SNT 2GT1 - Projet scolaire</strong></p>
+                    <p>Découverte de Linux et de l'Open Source.</p>
+                    <p style="margin-top: 10px;">Année scolaire : 2025-2026</p>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>&copy; 2026 LINUX_PROJET_SNT - Projet pédagogique</p>
+                <p style="font-size: 0.9rem; margin-top: 5px;">Réalisé avec HTML, CSS et JavaScript</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Animation pour le formulaire (DÉMONSTRATION UNIQUEMENT)
+        document.getElementById('contact-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Message de démonstration
+            const submitBtn = document.querySelector('button[type="submit"]');
+            const originalText = submitBtn.innerHTML;
+            
+            submitBtn.innerHTML = 'Simulation...';
+            submitBtn.style.background = 'linear-gradient(to right, #6c757d, #495057)';
+            
+            setTimeout(() => {
+                submitBtn.innerHTML = 'Démonstration !';
+                submitBtn.style.background = 'linear-gradient(to right, #28a745, #20c997)';
+                
+                setTimeout(() => {
+                    submitBtn.innerHTML = originalText;
+                    submitBtn.style.background = 'linear-gradient(to right, var(--primary-color), #0d6efd)';
+                    document.getElementById('contact-form').reset();
+                }, 1500);
+            }, 1000);
+        });
+        
+        // Animation de défilement fluide pour les ancres
+        document.querySelectorAll('nav a').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                
+                window.scrollTo({
+                    top: targetElement.offsetTop - 80,
+                    behavior: 'smooth'
+                });
+            });
+        });
+        
+        // Animation simple au survol des cartes
+        document.querySelectorAll('.distribution-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-5px)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0)';
+            });
+        });
+        
+        // Animation simple pour les sections
+        const sections = document.querySelectorAll('section');
+        window.addEventListener('scroll', function() {
+            sections.forEach(section => {
+                const sectionTop = section.getBoundingClientRect().top;
+                if (sectionTop < window.innerHeight - 100) {
+                    section.style.opacity = '1';
+                    section.style.transform = 'translateY(0)';
+                }
+            });
+        });
+        
+        // Initialiser les sections
+        sections.forEach(section => {
+            section.style.opacity = '0';
+            section.style.transform = 'translateY(20px)';
+            section.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+        });
+        
+        // Déclencher une première vérification
+        setTimeout(() => {
+            window.dispatchEvent(new Event('scroll'));
+        }, 100);
+    </script>
+</body>
+</html>
